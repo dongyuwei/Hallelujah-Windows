@@ -537,9 +537,9 @@ Section "" Register
 		File /r /x "__pycache__" /x "cin" "..\python\cinbase"
         ${If} ${SectionIsSelected} ${cheliu}
             ; Convert the tab file to *.cin format first.
-            nsExec::ExecToLog '"$INSTDIR\python\python3\python.exe" "$INSTDIR\python\cinbase\tools\liu_unitab2cin.py" "$LIU_UNI_TAB_FILE" "$INSTDIR\python\cinbase\cin\liu.cin"'
+            nsExec::ExecToLog '"$INSTDIR\python\python3\virtualenv\Scripts\python.exe" "$INSTDIR\python\cinbase\tools\liu_unitab2cin.py" "$LIU_UNI_TAB_FILE" "$INSTDIR\python\cinbase\cin\liu.cin"'
             ; Convert the liu.cin file to json format used by cinbase.
-            nsExec::ExecToLog '"$INSTDIR\python\python3\python.exe" "$INSTDIR\python\cinbase\tools\cintojson.py" "liu.cin"'
+            nsExec::ExecToLog '"$INSTDIR\python\python3\virtualenv\Scripts\python.exe" "$INSTDIR\python\cinbase\tools\cintojson.py" "liu.cin"'
         ${EndIf}
 	${EndIf}
 
@@ -581,7 +581,7 @@ Section "" Register
 
 	; Compile all installed python modules to *.pyc files
 	${If} $INST_PYTHON == "True"
-		nsExec::ExecToLog  '"$INSTDIR\python\python3\python.exe" -m compileall "$INSTDIR\python"'
+		nsExec::ExecToLog  '"$INSTDIR\python\python3\virtualenv\Scripts\python.exe" -m compileall "$INSTDIR\python"'
 	${EndIf}
 
 	; Launch the python server as current user (non-elevated process)

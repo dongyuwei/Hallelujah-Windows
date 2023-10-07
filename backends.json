@@ -1,7 +1,7 @@
 [
     {
         "name": "python",
-        "command": "python\\python3\\python.exe",
+        "command": "python\\python3\\virtualenv\\Scripts\\python.exe",
         "workingDir": "python",
         "params": "server.py"
     },
