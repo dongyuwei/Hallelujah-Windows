@@ -8,7 +8,7 @@
 	"win8_icon": "",
 	"moduleName": "braille_chewing_ime",
 	"serviceName": "BrailleChewingTextService",
-    "configTool": "..\\..\\python3\\pythonw.exe",
+    "configTool": "..\\..\\python3\\virtualenv\\Scripts\\pythonw.exe",
     "configToolParams": "..\\chewing\\config_tool.py config",
     "configToolDir": "..\\chewing"
 }

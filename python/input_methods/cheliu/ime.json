@@ -8,7 +8,7 @@
     "win8_icon": "",
     "moduleName": "cheliu_ime",
     "serviceName": "CheLiuTextService",
-    "configTool": "..\\..\\python3\\pythonw.exe",
+    "configTool": "..\\..\\python3\\virtualenv\\Scripts\\pythonw.exe",
     "configToolParams": "configtool.py config cheliu",
     "configToolDir": "..\\..\\cinbase"
 }

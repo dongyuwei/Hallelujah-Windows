@@ -8,7 +8,7 @@
     "win8_icon": "",
     "moduleName": "chesimplex_ime",
     "serviceName": "CheSimplexTextService",
-    "configTool": "..\\..\\python3\\pythonw.exe",
+    "configTool": "..\\..\\python3\\virtualenv\\Scripts\\pythonw.exe",
     "configToolParams": "configtool.py config chesimplex",
     "configToolDir": "..\\..\\cinbase"
 }
