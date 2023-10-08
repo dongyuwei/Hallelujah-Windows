@@ -1,6 +1,23 @@
+## Build and compile with Visual Studio 2019
+1. 项目根目录下执行 ./build.bat
+2. 使用 NSIS 构建install exe文件：a) Compile NSI scripts b) File -> Load script... -> installer/installer.nsi
+
+## 更好的 IPC 架構
+https://github.com/EasyIME/forum/issues/11
+
+## 开发(reload ime service)
+参考： https://github.com/EasyIME/PIME/issues/50
+已经安装的输入法，如果需要修改生效，则结束node或者python进程即可，会自动重启新进程（在任务管理器在可以查看进程的pid发生了变化）。
+
+## Log日志(win 11 中可以搜索 `%AppData%` 快速定位到)
+C:\Users\<user>\AppData\Local\PIME\Log 
+
 # PIME
 
 [![Build status](https://ci.appveyor.com/api/projects/status/cwfb9moce0dss7gs?svg=true)](https://ci.appveyor.com/project/dongyuwei/pime)
+
+以下为PIME原项目文档
+=================
 
 Implement input methods easily for Windows via Text Services Framework:
 *   LibIME contains a library which aims to be a simple wrapper for Windows Text Service Framework (TSF).

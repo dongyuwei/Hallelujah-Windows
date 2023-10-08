@@ -484,6 +484,13 @@ SectionGroup /e $(PYTHON_SECTION_GROUP) python_section_group
             StrCpy $INST_PYTHON "True"
 		SectionEnd
 
+		Section $(HALLELUHAH) Hallelujah
+			SectionIn 2
+			SetOutPath "$INSTDIR\python\input_methods\hallelujah"
+			File /r "..\python\input_methods\hallelujah\*.*"
+			StrCpy $INST_PYTHON "True"
+		SectionEnd
+
     SectionGroupEnd
 
 	SectionGroup /e $(PYTHON_CHS_SECTION_GROUP) python_chs_section_group
@@ -651,6 +658,7 @@ SectionEnd
 	!insertmacro MUI_DESCRIPTION_TEXT ${emojime} $(emojime_DESC)
 	!insertmacro MUI_DESCRIPTION_TEXT ${cheeng} $(cheeng_DESC)
 	!insertmacro MUI_DESCRIPTION_TEXT ${braille_chewing} $(braille_chewing_DESC)
+	!insertmacro MUI_DESCRIPTION_TEXT ${hallelujah} $(hallelujah_DESC)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;Uninstaller Section

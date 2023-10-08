@@ -40,6 +40,7 @@
 !insertmacro LANG_STRING EMOJIME "emojime"
 !insertmacro LANG_STRING CHEENG "Eng-Num"
 !insertmacro LANG_STRING BRAILLE_CHEWING "Braille Chewing"
+!insertmacro LANG_STRING HALLELUHAH "Hallelujah"
 
 !insertmacro LANG_STRING SELECT_LIU_FILE "Installation of Shiamy module requires that you have a legal copy of the table file of Boshiamy input method (liu-uni.tab).$\r$\nPlease provide the location of the liu-uni.tab file."
 !insertmacro LANG_STRING CANNOT_INSTALL_LIU "Without liu-uni.tab file, Shiamy input method cannot be installed."
@@ -64,6 +65,7 @@
 !insertmacro LANG_STRING emojime_DESC "Install emojime input method module."
 !insertmacro LANG_STRING cheeng_DESC "Install Eng-Num input method module."
 !insertmacro LANG_STRING braille_chewing_DESC "Install Braille Chewing input method module."
+!insertmacro LANG_STRING hallelujah_DESC "Install Hallelujah input method module."
 
 !insertmacro LANG_STRING SET_CHEWING "Setup Chewing input method"
 !insertmacro LANG_STRING SET_CHEWING_PHRASES "Edit Chewing phrases"
@@ -77,5 +79,6 @@
 !insertmacro LANG_STRING SET_CHEPHONETIC "Setup Phonetic input method"
 !insertmacro LANG_STRING SET_CHEEZ "Setup EZ Input method"
 !insertmacro LANG_STRING SET_BRAILLE_CHEWING "Setup Braille Chewing input method"
+!insertmacro LANG_STRING SET_HALLELUHAH "Setup Hallelujah input method"
 
 !insertmacro LANG_STRING UNINSTALL_PIME "Uninstall PIME"

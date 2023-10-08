@@ -1,0 +1,11 @@
+{
+	"name":"hallelujah",
+	"version": "0.1",
+	"guid": "{154EC95A-22DC-412B-9687-1808F91A291F}",
+	"locale": "zh-Hans-CN",
+    "fallbackLocale": "zh-CN",
+	"icon": "icon.ico",
+	"win8_icon": "",
+	"moduleName": "ime_hallelujah",
+	"serviceName": "HallelujahTextService"
+}
