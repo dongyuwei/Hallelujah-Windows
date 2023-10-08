@@ -12,7 +12,7 @@ class HallelujahTextService(TextService):
         self.dictPath = os.path.join(os.path.dirname(__file__), "dict")
         self.loadTrie()
         self.loadWordsWithFrequency()
-        self.loadWordsWithFrequency()
+        self.loadPinyinData()
         self.icon_dir = os.path.abspath(os.path.dirname(__file__))
     
     def loadTrie(self):
@@ -78,12 +78,17 @@ class HallelujahTextService(TextService):
         return list(OrderedDict.fromkeys(candidates).keys())
 
     def clear(self):
+        self.setCandidateList([])
         self.setShowCandidates(False)
         self.setCompositionString("")
         self.setCompositionCursor(0)
+
+    def onDeactivate(self):
+        self.setCompositionString(self.compositionString)
+        self.clear()
         
     def onKeyDown(self, keyEvent):
-        print('hall keyEvent, charCode: ', keyEvent.charCode, '-- keyCode: ', keyEvent.keyCode)
+        print('halle keyEvent, charCode: ', keyEvent.charCode, '-- keyCode: ', keyEvent.keyCode)
         candidates = []
         charStr = chr(keyEvent.charCode).lower()
         if charStr.isalpha():  # 英文字母 A-Z
@@ -96,15 +101,18 @@ class HallelujahTextService(TextService):
         elif keyEvent.keyCode == VK_SPACE:  # 空白鍵
             self.setCommitString(self.compositionString + ' ')
             self.clear()
+            return True
             
         # handle candidate selection
         if self.showCandidates:
             if charStr.isdigit():
-                i = keyEvent.keyCode - ord('1')
-                candidate = candidates[i]
-                self.setCompositionString(candidate)
-                self.setShowCandidates(False)
-                return True
+                index = keyEvent.keyCode - ord('1')
+                print("halle", index, charStr, candidates)
+                if index < len(candidates):
+                    candidate = candidates[index]
+                    self.setCompositionString(candidate)
+                    self.setShowCandidates(False)
+                    return True
             return False
         
         # handle normal text input
