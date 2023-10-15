@@ -122,7 +122,7 @@ class HallelujahTextService(TextService):
             self.clear()
             return True
         elif keyEvent.keyCode == VK_BACK:
-            if self.compositionString != "":
+            if len(self.compositionString) > 1:
                 input = self.compositionString[:-1]
                 self.inputWithCandidates(input)
             else:
