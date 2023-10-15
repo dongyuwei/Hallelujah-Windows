@@ -29,7 +29,7 @@ class HallelujahTextService(TextService):
 
     def onActivate(self):
         TextService.onActivate(self)
-        self.customizeUI(candFontSize = 16, candPerRow = 9)
+        self.customizeUI(candFontSize = 16, candPerRow = 9, candUseCursor=True)
         self.setSelKeys("123456789")
 
     def onDeactivate(self):
@@ -66,16 +66,22 @@ class HallelujahTextService(TextService):
         # 其餘狀況一律不處理，原按鍵輸入直接送還給應用程式
         return False
     
-    def getCandidates(self, prefix):
+    def getCandidates(self, input):
         candidates = []
-        suggestions = self.trie.keys(prefix)
+        suggestions = self.trie.keys(input)
         if len(suggestions) > 0:
             candidates = nlargest(8, suggestions, key=lambda word: self.wordsWithFrequencyDict.get(word, {}).get('frequency', 0))
-        elif self.pinyinDict[prefix]:
-            candidates = self.pinyinDict[prefix]
+        elif self.pinyinDict.get(input):
+            candidates = self.pinyinDict.get(input)
         
-        candidates.insert(0, prefix)
+        candidates.insert(0, input)
         return list(OrderedDict.fromkeys(candidates).keys())
+    
+    def inputWithCandidates(self, input):
+        self.setCompositionString(input)
+        self.setCompositionCursor(len(input))
+        self.setCandidateList(self.getCandidates(input))
+        self.setShowCandidates(True)
 
     def clear(self):
         self.setCandidateList([])
@@ -89,54 +95,50 @@ class HallelujahTextService(TextService):
         
     def onKeyDown(self, keyEvent):
         print('halle keyEvent, charCode: ', keyEvent.charCode, '-- keyCode: ', keyEvent.keyCode)
-        candidates = []
         charStr = chr(keyEvent.charCode).lower()
-        if charStr.isalpha():  # 英文字母 A-Z
-            prefix = self.compositionString  + charStr
-            self.setCompositionString(prefix)
-            self.setCompositionCursor(len(prefix))
-            candidates = self.getCandidates(prefix)
-            self.setCandidateList(candidates)
-            self.setShowCandidates(True)
-        elif keyEvent.keyCode == VK_SPACE:  # 空白鍵
-            self.setCommitString(self.compositionString + ' ')
-            self.clear()
-            return True
             
         # handle candidate selection
         if self.showCandidates:
-            if charStr.isdigit():
+            if keyEvent.keyCode == VK_ESCAPE:
+                self.setCommitString(self.compositionString)
+                self.clear()
+                return True
+            elif keyEvent.keyCode >= ord('1') and keyEvent.keyCode <= ord('9'):
                 index = keyEvent.keyCode - ord('1')
-                print("halle", index, charStr, candidates)
-                if index < len(candidates):
-                    candidate = candidates[index]
-                    self.setCompositionString(candidate)
-                    self.setShowCandidates(False)
+                print("halle", index, charStr, self.candidateList)
+                if index < len(self.candidateList):
+                    candidate = self.candidateList[index]
+                    self.setCommitString(candidate)
+                    self.clear()
                     return True
-            return False
         
         # handle normal text input
         if not self.isComposing():
             if keyEvent.keyCode == VK_RETURN or keyEvent.keyCode == VK_BACK:
                 return False
+        
         if keyEvent.keyCode == VK_RETURN:
             self.setCommitString(self.compositionString)
             self.clear()
+            return True
         elif keyEvent.keyCode == VK_BACK and self.compositionString != "":
-            self.setCompositionString(self.compositionString[:-1])
-            if self.compositionString != "":
-                candidates = self.getCandidates(self.compositionString)
-                self.setCandidateList(candidates)
-                self.setShowCandidates(True)
-            else:
-                self.clear()
-        elif keyEvent.isPrintableChar() or keyEvent.isSymbols():
+            input = self.compositionString[:-1]
+            self.inputWithCandidates(input)
+            return True
+        elif keyEvent.isSymbols():
             self.setCommitString(self.compositionString  + charStr)
             self.clear()
-        else:
-            self.setCompositionString(self.compositionString + chr(keyEvent.charCode).lower())
-            self.setCompositionCursor(len(self.compositionString))
-        return True
+            return True
+        elif charStr.isalpha():  # 英文字母 A-Z
+            input = self.compositionString  + charStr
+            self.inputWithCandidates(input)
+            return True
+        elif keyEvent.keyCode == VK_SPACE:  # 空白鍵
+            self.setCommitString(self.compositionString + ' ')
+            self.clear()
+            return True
+        
+        return False
 
     def onCommand(self, commandId, commandType):
         print("onCommand", commandId, commandType)
