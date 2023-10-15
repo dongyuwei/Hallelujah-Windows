@@ -121,9 +121,13 @@ class HallelujahTextService(TextService):
             self.setCommitString(self.compositionString)
             self.clear()
             return True
-        elif keyEvent.keyCode == VK_BACK and self.compositionString != "":
-            input = self.compositionString[:-1]
-            self.inputWithCandidates(input)
+        elif keyEvent.keyCode == VK_BACK:
+            if self.compositionString != "":
+                input = self.compositionString[:-1]
+                self.inputWithCandidates(input)
+            else:
+                self.setCommitString("")
+                self.clear()
             return True
         elif keyEvent.isSymbols():
             self.setCommitString(self.compositionString  + charStr)
