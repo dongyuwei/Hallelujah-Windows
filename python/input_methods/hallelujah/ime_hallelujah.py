@@ -135,7 +135,7 @@ class HallelujahTextService(TextService):
                 self.setCommitString("")
                 self.clear()
             return True
-        elif keyEvent.isSymbols() or keyEvent.charCode in string.punctuation:
+        elif charStr in string.punctuation:
             self.setCommitString(self.compositionString  + charStr)
             self.clear()
             return True
