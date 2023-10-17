@@ -12,6 +12,9 @@ https://github.com/EasyIME/forum/issues/11
 ## Log日志(win 11 中可以搜索 `%AppData%` 快速定位到)
 C:\Users\<user>\AppData\Local\PIME\Log 
 
+## pip install packages
+`python/python3/virtualenv/Scripts/python.exe -m pip install -r requirements.txt`
+
 # PIME
 
 [![Build status](https://ci.appveyor.com/api/projects/status/cwfb9moce0dss7gs?svg=true)](https://ci.appveyor.com/project/dongyuwei/pime)

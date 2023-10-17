@@ -2,3 +2,4 @@ build/
 build64/
 installer/*.exe
 .idea/
+python/python3/virtualenv/Lib/site-packages/pip/_internal/
