@@ -5,6 +5,7 @@ import json
 from collections import OrderedDict
 from heapq import nlargest
 import marisa_trie
+from autocorrect import Speller
 
 class HallelujahTextService(TextService):
     def __init__(self, client):
@@ -14,6 +15,7 @@ class HallelujahTextService(TextService):
         self.loadWordsWithFrequency()
         self.loadPinyinData()
         self.icon_dir = os.path.abspath(os.path.dirname(__file__))
+        self.spellchecker = Speller()
     
     def loadTrie(self):
         trie = marisa_trie.Trie()
@@ -73,7 +75,10 @@ class HallelujahTextService(TextService):
             candidates = nlargest(8, suggestions, key=lambda word: self.wordsWithFrequencyDict.get(word, {}).get('frequency', 0))
         elif self.pinyinDict.get(input):
             candidates = self.pinyinDict.get(input)
-        
+        else:
+            alternatives = self.spellchecker.get_candidates(input)
+            alternatives.sort(key=lambda x: x[0], reverse=True)
+            candidates = [word for freq, word in alternatives]
         candidates.insert(0, input)
         return list(OrderedDict.fromkeys(candidates).keys())
     

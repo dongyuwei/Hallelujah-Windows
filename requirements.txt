@@ -1,1 +1,2 @@
+autocorrect==2.6.1
 marisa-trie==1.1.0

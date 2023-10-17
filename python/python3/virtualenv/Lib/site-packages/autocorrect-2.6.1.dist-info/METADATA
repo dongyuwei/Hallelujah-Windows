@@ -1,0 +1,27 @@
+Metadata-Version: 2.1
+Name: autocorrect
+Version: 2.6.1
+Summary: Spelling Corrector
+Home-page: https://github.com/fsondej/autocorrect
+Author: Jonas McCallum, Filip Sondej
+Author-email: filipsondej@protonmail.com
+License: https://opensource.org/licenses/LGPL-3.0
+Keywords: autocorrect spelling corrector nlp multilanguage spellcheck
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)
+Classifier: Natural Language :: English
+Classifier: Natural Language :: Polish
+Classifier: Natural Language :: Russian
+Classifier: Natural Language :: Ukrainian
+Classifier: Natural Language :: Turkish
+Classifier: Natural Language :: Spanish
+Classifier: Natural Language :: Czech
+Classifier: Natural Language :: Portuguese
+Classifier: Natural Language :: Greek
+Classifier: Natural Language :: Italian
+Classifier: Natural Language :: French
+Classifier: Natural Language :: Vietnamese
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.6
+
