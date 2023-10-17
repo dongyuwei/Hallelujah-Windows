@@ -13,7 +13,9 @@ https://github.com/EasyIME/forum/issues/11
 C:\Users\<user>\AppData\Local\PIME\Log 
 
 ## pip install packages
-`python/python3/virtualenv/Scripts/python.exe -m pip install -r requirements.txt`
+- python/python3/virtualenv/Scripts/python.exe -m pip install -U marisa-trie
+- python/python3/virtualenv/Scripts/python.exe -m pip freeze > requirements.txt
+- python/python3/virtualenv/Scripts/python.exe -m pip install -r requirements.txt
 
 # PIME
 
