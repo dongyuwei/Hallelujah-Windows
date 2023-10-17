@@ -5,6 +5,7 @@ import json
 from collections import OrderedDict
 from heapq import nlargest
 import marisa_trie
+import string
 from autocorrect import Speller
 
 class HallelujahTextService(TextService):
@@ -134,7 +135,7 @@ class HallelujahTextService(TextService):
                 self.setCommitString("")
                 self.clear()
             return True
-        elif keyEvent.isSymbols():
+        elif keyEvent.isSymbols() or keyEvent.charCode in string.punctuation:
             self.setCommitString(self.compositionString  + charStr)
             self.clear()
             return True
