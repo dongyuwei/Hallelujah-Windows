@@ -32,7 +32,7 @@ class HallelujahTextService(TextService):
 
     def onActivate(self):
         TextService.onActivate(self)
-        self.customizeUI(candFontSize = 16, candPerRow = 9, candUseCursor=True)
+        self.customizeUI(candFontSize = 16, candPerRow = 1, candUseCursor=True, candFontName='MingLiu')
         self.setSelKeys("123456789")
 
     def onDeactivate(self):
@@ -73,7 +73,7 @@ class HallelujahTextService(TextService):
         candidates = []
         suggestions = self.trie.keys(input)
         if len(suggestions) > 0:
-            candidates = nlargest(8, suggestions, key=lambda word: self.wordsWithFrequencyDict.get(word, {}).get('frequency', 0))
+            candidates = nlargest(10, suggestions, key=lambda word: self.wordsWithFrequencyDict.get(word, {}).get('frequency', 0))
         elif self.pinyinDict.get(input):
             candidates = self.pinyinDict.get(input)
         else:
@@ -81,7 +81,7 @@ class HallelujahTextService(TextService):
             alternatives.sort(key=lambda x: x[0], reverse=True)
             candidates = [word for freq, word in alternatives]
         candidates.insert(0, input)
-        return list(OrderedDict.fromkeys(candidates).keys())
+        return list(OrderedDict.fromkeys(candidates).keys())[0:9]
     
     def inputWithCandidates(self, input):
         self.setCompositionString(input)
