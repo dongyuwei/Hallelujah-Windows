@@ -109,7 +109,7 @@ class HallelujahTextService(TextService):
                 self.setCommitString(self.compositionString)
                 self.clear()
                 return True
-            elif keyEvent.keyCode >= ord('1') and keyEvent.keyCode <= ord('9'):
+            elif not keyEvent.isKeyDown(VK_SHIFT) and (keyEvent.keyCode >= ord('1') and keyEvent.keyCode <= ord('9')):
                 index = keyEvent.keyCode - ord('1')
                 print("halle", index, charStr, self.candidateList)
                 if index < len(self.candidateList):
