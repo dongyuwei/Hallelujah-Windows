@@ -94,7 +94,7 @@ class HallelujahTextService(TextService):
         for i, word_ipa in enumerate(candidateList2):
             word, ipa = word_ipa.split(' ', 1)
             ipa_padding = " " * (max_len - len(word) - len(ipa) - 1)
-            candidateList2[i] = f"{word}{ipa_padding}{ipa}"
+            candidateList2[i] = f"{word} {ipa_padding}{ipa}"
 
         return candidateList2
     
@@ -119,10 +119,11 @@ class HallelujahTextService(TextService):
 
     def getOutput(self, chrStr):
         output = self.compositionString
-        candidate = self.candidateList[self.candidateCursor]
-        if candidate:
-            word, ipa = candidate.split(' ', 1)
-            output = word
+        if self.candidateCursor <= len(self.candidateList) - 1:
+            candidate = self.candidateList[self.candidateCursor]
+            if candidate:
+                word, ipa = candidate.split(' ', 1)
+                output = word
         return output + chrStr
         
     def onKeyDown(self, keyEvent):
@@ -174,12 +175,24 @@ class HallelujahTextService(TextService):
             i = self.candidateCursor - 1
             if i >= 0:
                 self.setCandidateCursor(i)
+                self.showTranslationMessage(i)
+            return True
         elif keyEvent.keyCode == VK_RIGHT or keyEvent.keyCode == VK_DOWN:
             i = self.candidateCursor + 1
-            if i <= len(self.candidateList):
+            if i <= len(self.candidateList) - 1:
                 self.setCandidateCursor(i)
-        
+                self.showTranslationMessage(i)
+            return True
         return False
+    
+    def showTranslationMessage(self, candidateCursor):
+        candidate = self.candidateList[candidateCursor]
+        if candidate:
+            word, ipa = candidate.split(' ', 1)
+            translation = self.wordsWithFrequencyDict.get(word.lower(), {}).get('translation', [])
+            if len(translation) > 0:
+                duration = 1 if candidateCursor == 1 else 2
+                self.showMessage(" ".join(translation), duration)
 
     def onCommand(self, commandId, commandType):
         print("onCommand", commandId, commandType)
