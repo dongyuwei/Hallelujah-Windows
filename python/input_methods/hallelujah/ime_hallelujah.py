@@ -56,10 +56,6 @@ class HallelujahTextService(TextService):
         if keyEvent.isKeyDown(VK_CONTROL):
             return False
 
-        # 若按下 Shift 鍵
-        if keyEvent.isKeyDown(VK_SHIFT):
-            return False
-
         if keyEvent.isChar() and chr(keyEvent.charCode).isalpha():
             return True
         
@@ -69,7 +65,8 @@ class HallelujahTextService(TextService):
         # 其餘狀況一律不處理，原按鍵輸入直接送還給應用程式
         return False
     
-    def getCandidates(self, input):
+    def getCandidates(self, prefix):
+        input = prefix.lower()
         candidates = []
         suggestions = self.trie.keys(input)
         if len(suggestions) > 0:
@@ -81,7 +78,15 @@ class HallelujahTextService(TextService):
             alternatives.sort(key=lambda x: x[0], reverse=True)
             candidates = [word for freq, word in alternatives]
         candidates.insert(0, input)
-        return list(OrderedDict.fromkeys(candidates).keys())[0:9]
+        candidateList = list(OrderedDict.fromkeys(candidates).keys())[0:9]
+        
+        candidateList2 = []
+        for word in candidateList:
+            if word.lower().startswith(prefix.lower()):
+                candidateList2.append(prefix + word[len(prefix):]) 
+            else:
+                candidateList2.append(word)
+        return candidateList2
     
     def inputWithCandidates(self, input):
         self.setCompositionString(input)
@@ -101,7 +106,7 @@ class HallelujahTextService(TextService):
         
     def onKeyDown(self, keyEvent):
         print('halle keyEvent, charCode: ', keyEvent.charCode, '-- keyCode: ', keyEvent.keyCode)
-        charStr = chr(keyEvent.charCode).lower()
+        charStr = chr(keyEvent.charCode)
             
         # handle candidate selection
         if self.showCandidates:
