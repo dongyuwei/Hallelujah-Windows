@@ -106,13 +106,24 @@ class HallelujahTextService(TextService):
 
     def clear(self):
         self.setCandidateList([])
+        self.setCandidateCursor(0)
         self.setShowCandidates(False)
+
         self.setCompositionString("")
         self.setCompositionCursor(0)
+        
 
     def onDeactivate(self):
         self.setCompositionString(self.compositionString)
         self.clear()
+
+    def getOutput(self, chrStr):
+        output = self.compositionString
+        candidate = self.candidateList[self.candidateCursor]
+        if candidate:
+            word, ipa = candidate.split(' ', 1)
+            output = word
+        return output + chrStr
         
     def onKeyDown(self, keyEvent):
         print('halle keyEvent, charCode: ', keyEvent.charCode, '-- keyCode: ', keyEvent.keyCode)
@@ -140,7 +151,7 @@ class HallelujahTextService(TextService):
                 return False
         
         if keyEvent.keyCode == VK_RETURN:
-            self.setCommitString(self.compositionString)
+            self.setCommitString(self.getOutput(""))
             self.clear()
             return True
         elif keyEvent.keyCode == VK_BACK:
@@ -151,18 +162,22 @@ class HallelujahTextService(TextService):
                 self.setCommitString("")
                 self.clear()
             return True
-        elif charStr in string.punctuation:
-            self.setCommitString(self.compositionString  + charStr)
+        elif charStr in string.punctuation or keyEvent.keyCode == VK_SPACE: #標點符號或者空白鍵
+            self.setCommitString(self.getOutput(charStr))
             self.clear()
             return True
         elif charStr.isalpha():  # 英文字母 A-Z
             input = self.compositionString  + charStr
             self.inputWithCandidates(input)
             return True
-        elif keyEvent.keyCode == VK_SPACE:  # 空白鍵
-            self.setCommitString(self.compositionString + ' ')
-            self.clear()
-            return True
+        elif keyEvent.keyCode == VK_LEFT or keyEvent.keyCode == VK_UP:
+            i = self.candidateCursor - 1
+            if i >= 0:
+                self.setCandidateCursor(i)
+        elif keyEvent.keyCode == VK_RIGHT or keyEvent.keyCode == VK_DOWN:
+            i = self.candidateCursor + 1
+            if i <= len(self.candidateList):
+                self.setCandidateCursor(i)
         
         return False
 
