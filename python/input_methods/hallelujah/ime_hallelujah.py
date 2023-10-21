@@ -81,11 +81,21 @@ class HallelujahTextService(TextService):
         candidateList = list(OrderedDict.fromkeys(candidates).keys())[0:9]
         
         candidateList2 = []
+        max_len = 0
         for word in candidateList:
+            item = self.wordsWithFrequencyDict.get(word, {})
+            ipa = item.get('ipa', '')
+            word_ipa = f"{word} [{ipa}]" if ipa else f"{word}  "
             if word.lower().startswith(prefix.lower()):
-                candidateList2.append(prefix + word[len(prefix):]) 
-            else:
-                candidateList2.append(word)
+                word_ipa = f"{prefix + word[len(prefix):]} [{ipa}]" if ipa else f"{prefix + word[len(prefix):]}  "
+            max_len = max(max_len, len(word_ipa)) 
+            candidateList2.append(word_ipa)  
+        
+        for i, word_ipa in enumerate(candidateList2):
+            word, ipa = word_ipa.split(' ', 1)
+            ipa_padding = " " * (max_len - len(word) - len(ipa) - 1)
+            candidateList2[i] = f"{word}{ipa_padding}{ipa}"
+
         return candidateList2
     
     def inputWithCandidates(self, input):
@@ -119,7 +129,8 @@ class HallelujahTextService(TextService):
                 print("halle", index, charStr, self.candidateList)
                 if index < len(self.candidateList):
                     candidate = self.candidateList[index]
-                    self.setCommitString(candidate)
+                    word, ipa = candidate.split(' ', 1)
+                    self.setCommitString(word)
                     self.clear()
                     return True
         
