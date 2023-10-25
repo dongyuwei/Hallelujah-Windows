@@ -183,7 +183,3 @@ class HallelujahTextService(TextService):
     def getTranslationMessage(self, word):
         translation = self.wordsWithFrequencyDict.get(word.lower(), {}).get('translation', [])
         return " ".join(translation)
-
-            
-    def onCommand(self, commandId, commandType):
-        print("onCommand", commandId, commandType)
