@@ -125,6 +125,10 @@ class HallelujahTextService(TextService):
             
         # handle candidate selection
         if self.showCandidates:
+            if keyEvent.isKeyDown(VK_CONTROL):
+                self.setCommitString(self.compositionString)
+                self.clear()
+                return False
             if keyEvent.keyCode == VK_ESCAPE:
                 self.setCommitString(self.compositionString)
                 self.clear()
