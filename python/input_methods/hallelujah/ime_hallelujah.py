@@ -87,7 +87,7 @@ class HallelujahTextService(TextService):
             word_ipa_translation = f"{word} [{ipa}] {self.getTranslationMessage(word)}"
             if word.lower().startswith(prefix.lower()):
                 word_ipa_translation = f"{prefix + word[len(prefix):]} [{ipa}] {self.getTranslationMessage(word)}"
-            candidateList2.append(word_ipa_translation)  
+            candidateList2.append(word_ipa_translation[0:50])  
 
         return candidateList2
     
