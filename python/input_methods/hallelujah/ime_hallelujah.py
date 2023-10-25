@@ -81,20 +81,13 @@ class HallelujahTextService(TextService):
         candidateList = list(OrderedDict.fromkeys(candidates).keys())[0:9]
         
         candidateList2 = []
-        max_len = 0
         for word in candidateList:
             item = self.wordsWithFrequencyDict.get(word, {})
-            ipa = item.get('ipa', '')
-            word_ipa = f"{word} [{ipa}]" if ipa else f"{word}  "
+            ipa = item.get('ipa', ' ')
+            word_ipa_translation = f"{word} [{ipa}] {self.getTranslationMessage(word)}"
             if word.lower().startswith(prefix.lower()):
-                word_ipa = f"{prefix + word[len(prefix):]} [{ipa}]" if ipa else f"{prefix + word[len(prefix):]}  "
-            max_len = max(max_len, len(word_ipa)) 
-            candidateList2.append(word_ipa)  
-        
-        for i, word_ipa in enumerate(candidateList2):
-            word, ipa = word_ipa.split(' ', 1)
-            ipa_padding = " " * (max_len - len(word) - len(ipa) - 1)
-            candidateList2[i] = f"{word} {ipa_padding}{ipa}"
+                word_ipa_translation = f"{prefix + word[len(prefix):]} [{ipa}] {self.getTranslationMessage(word)}"
+            candidateList2.append(word_ipa_translation)  
 
         return candidateList2
     
@@ -175,24 +168,18 @@ class HallelujahTextService(TextService):
             i = self.candidateCursor - 1
             if i >= 0:
                 self.setCandidateCursor(i)
-                self.showTranslationMessage(i)
             return True
         elif keyEvent.keyCode == VK_RIGHT or keyEvent.keyCode == VK_DOWN:
             i = self.candidateCursor + 1
             if i <= len(self.candidateList) - 1:
                 self.setCandidateCursor(i)
-                self.showTranslationMessage(i)
             return True
         return False
     
-    def showTranslationMessage(self, candidateCursor):
-        candidate = self.candidateList[candidateCursor]
-        if candidate:
-            word, ipa = candidate.split(' ', 1)
-            translation = self.wordsWithFrequencyDict.get(word.lower(), {}).get('translation', [])
-            if len(translation) > 0:
-                duration = 1 if candidateCursor == 1 else 2
-                self.showMessage(" ".join(translation), duration)
+    def getTranslationMessage(self, word):
+        translation = self.wordsWithFrequencyDict.get(word.lower(), {}).get('translation', [])
+        return " ".join(translation)
 
+            
     def onCommand(self, commandId, commandType):
         print("onCommand", commandId, commandType)
