@@ -115,14 +115,16 @@ class HallelujahTextService(TextService):
         output = self.compositionString
         if self.candidateCursor <= len(self.candidateList) - 1:
             candidate = self.candidateList[self.candidateCursor]
-            if candidate:
-                if '[' in candidate:
-                    word, ipa = candidate.split('[', 1)
-                else:
-                    word = candidate
-                    ipa = None
-                output = word.strip()
+            output = self.getOutputFromCandidate(candidate)
         return output + chrStr
+    def getOutputFromCandidate(self, candidate):
+        word = ''
+        if candidate:
+            if '[' in candidate:
+                word, ipa = candidate.split('[', 1)
+            else:
+                word = candidate
+        return word.strip()
         
     def onKeyDown(self, keyEvent):
         print('halle keyEvent, charCode: ', keyEvent.charCode, '-- keyCode: ', keyEvent.keyCode)
@@ -143,7 +145,7 @@ class HallelujahTextService(TextService):
                 print("halle", index, charStr, self.candidateList)
                 if index < len(self.candidateList):
                     candidate = self.candidateList[index]
-                    word, ipa = candidate.split(' ', 1)
+                    word = self.getOutputFromCandidate(candidate)
                     self.setCommitString(word)
                     self.clear()
                     return True
