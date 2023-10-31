@@ -32,7 +32,7 @@ class HallelujahTextService(TextService):
 
     def onActivate(self):
         TextService.onActivate(self)
-        self.customizeUI(candFontSize = 16, candPerRow = 1, candUseCursor=True, candFontName='MingLiu')
+        self.customizeUI(candFontSize = 14, candPerRow = 1, candUseCursor=True, candFontName='MingLiu')
         self.setSelKeys("123456789")
 
     def onDeactivate(self):
@@ -83,10 +83,11 @@ class HallelujahTextService(TextService):
         candidateList2 = []
         for word in candidateList:
             item = self.wordsWithFrequencyDict.get(word, {})
-            ipa = item.get('ipa', ' ')
-            word_ipa_translation = f"{word} [{ipa}] {self.getTranslationMessage(word)}"
+            ipa = item.get('ipa', '')
+            ipa2 = f"{[ipa]}" if ipa else ' '
+            word_ipa_translation = f"{word} {ipa2} {self.getTranslationMessage(word)}"
             if word.lower().startswith(prefix.lower()):
-                word_ipa_translation = f"{prefix + word[len(prefix):]} [{ipa}] {self.getTranslationMessage(word)}"
+                word_ipa_translation = f"{prefix + word[len(prefix):]} {ipa2} {self.getTranslationMessage(word)}"
             candidateList2.append(word_ipa_translation[0:50])  
 
         return candidateList2
@@ -115,8 +116,12 @@ class HallelujahTextService(TextService):
         if self.candidateCursor <= len(self.candidateList) - 1:
             candidate = self.candidateList[self.candidateCursor]
             if candidate:
-                word, ipa = candidate.split(' ', 1)
-                output = word
+                if '[' in candidate:
+                    word, ipa = candidate.split('[', 1)
+                else:
+                    word = candidate
+                    ipa = None
+                output = word.strip()
         return output + chrStr
         
     def onKeyDown(self, keyEvent):
