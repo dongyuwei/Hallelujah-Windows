@@ -2,6 +2,8 @@
 
 # 哈利路亚英文输入法
 
+[![Build status](https://ci.appveyor.com/api/projects/status/cwfb9moce0dss7gs?svg=true)](https://ci.appveyor.com/project/dongyuwei/pime)
+
 哈利路亚英文输入法 是一款智能英语输入法。其特性如下：
 
 1. 离线词库较大较全，词频精准。参见 Google's [1/3 million most frequent English words](http://norvig.com/ngrams/count_1w.txt).
@@ -15,8 +17,12 @@
 - https://ci.appveyor.com/project/dongyuwei/pime/build/artifacts CI自动构建版。
 
 ## Build and compile with Visual Studio 2019
-1. 项目根目录下执行 ./build.bat
-2. 使用 NSIS 构建install exe文件：a) Compile NSI scripts b) File -> Load script... -> installer/installer.nsi
+1. 安装cmake（tested with `cmake version 3.25.0-rc2`）
+2. 项目根目录下执行 ./build.bat
+3. 使用 NSIS 构建install exe文件：
+   1. Compile NSI scripts
+   2. File -> Load script... -> installer/installer.nsi
+4. CI 构建可参考 appveyor.yml
 
 ## 更好的 IPC 架構
 https://github.com/EasyIME/forum/issues/11
@@ -32,10 +38,6 @@ C:\Users\<user>\AppData\Local\PIME\Log
 - python/python3/virtualenv/Scripts/python.exe -m pip install -U marisa-trie
 - python/python3/virtualenv/Scripts/python.exe -m pip freeze > requirements.txt
 - python/python3/virtualenv/Scripts/python.exe -m pip install -r requirements.txt
-
-# PIME
-
-[![Build status](https://ci.appveyor.com/api/projects/status/cwfb9moce0dss7gs?svg=true)](https://ci.appveyor.com/project/dongyuwei/pime)
 
 以下为PIME原项目文档
 =================
