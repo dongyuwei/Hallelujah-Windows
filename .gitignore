@@ -4,3 +4,4 @@ installer/*.exe
 .idea/
 python/python3/virtualenv/Lib/site-packages/pip/_internal/
 python/python3/virtualenv/Lib/site-packages/**/*.pyc
+__pycache__/
