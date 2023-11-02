@@ -1,4 +1,4 @@
-# 本項目基於PIME移植原 Mac 系統上 [哈利路亚英文输入法](https://github.com/dongyuwei/hallelujahIM) 到 Windows 系統上。
+# 本项目基于PIME移植原苹果 Mac 系统上 [哈利路亚英文输入法](https://github.com/dongyuwei/hallelujahIM) 到 Windows 平台上。
 
 # 哈利路亚英文输入法
 
@@ -10,9 +10,9 @@
 4. 支持按拼音来输出对应英文。如输入`suanfa`，输入法会候选词中会显示 `algorithm`。
 5. 选词方式：数字键 1~9 及 `Enter` 回车键和 `Space` 空格键均可选词提交。`Space` 空格键选词默认会自动附加一个空格在单词后面。`Enter` 回车键选词则不会附加空格。
 
-# 下載安裝
-- https://github.com/dongyuwei/PIME/releases 這裏是我手動發佈的版本
-- https://ci.appveyor.com/project/dongyuwei/pime/build/artifacts 這裏是CI自動構建的版本
+# 下载安装
+- https://github.com/dongyuwei/PIME/releases 手动发布版，较稳定。
+- https://ci.appveyor.com/project/dongyuwei/pime/build/artifacts CI自动构建版。
 
 ## Build and compile with Visual Studio 2019
 1. 项目根目录下执行 ./build.bat
