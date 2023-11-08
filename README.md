@@ -13,8 +13,7 @@
 5. 选词方式：数字键 1~9 及 `Enter` 回车键和 `Space` 空格键均可选词提交。`Space` 空格键选词默认会自动附加一个空格在单词后面。`Enter` 回车键选词则不会附加空格。
 
 # 下载安装
-- https://github.com/dongyuwei/PIME/releases 手动发布版，较稳定。
-- https://ci.appveyor.com/project/dongyuwei/pime/build/artifacts CI自动构建版。
+- https://github.com/dongyuwei/PIME/releases 
 
 ## Build and compile with Visual Studio 2019
 1. 安装cmake（tested with `cmake version 3.25.0-rc2`）
