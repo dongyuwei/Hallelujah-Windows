@@ -7,6 +7,11 @@ from heapq import nlargest
 import marisa_trie
 import string
 from autocorrect import Speller
+from pyphonetics import FuzzySoundex
+
+fuzzySoundex = FuzzySoundex()
+def levenshtein_distance(word, input_word):
+    return fuzzySoundex.distance(word, input_word, metric='levenshtein')
 
 class HallelujahTextService(TextService):
     def __init__(self, client):
@@ -26,9 +31,15 @@ class HallelujahTextService(TextService):
     def loadWordsWithFrequency(self):
         with open(os.path.join(self.dictPath, "words_with_frequency_and_translation_and_ipa.json"), encoding='utf-8') as f:
             self.wordsWithFrequencyDict = json.load(f)
+    
     def loadPinyinData(self):
         with open(os.path.join(self.dictPath, "cedict.json"), encoding='utf-8') as f:
             self.pinyinDict = json.load(f)
+    
+    # get phonetics match
+    def loadFuzzySoundexEncodedData(self):
+        with open(os.path.join(self.dictPath, "fuzzy_soundex_encoded_words.json"), encoding='utf-8') as f:
+            self.fuzzySoundexEncodedDict = json.load(f)
 
     def onActivate(self):
         TextService.onActivate(self)
@@ -65,19 +76,33 @@ class HallelujahTextService(TextService):
         # 其餘狀況一律不處理，原按鍵輸入直接送還給應用程式
         return False
     
+    def getSuggestionOfSpellChecker(self, input):
+        alternatives = self.spellchecker.get_candidates(input)
+        alternatives.sort(key=lambda x: x[0], reverse=True)
+        candidates = [word for freq, word in alternatives]
+        if len(input) > 3:
+            encoded_key = fuzzySoundex.phonetics(input)
+            phonetic_candidates = self.sortByLevenshteinDistance(self.fuzzySoundexEncodedDict.get(encoded_key, []))
+            if len(phonetic_candidates) > 0:
+                candidates = candidates[:4] + phonetic_candidates[:4]
+        return candidates
+    
+    def sortByLevenshteinDistance(input_word, phonetic_candidates):
+        return phonetic_candidates.sort(key=lambda word: levenshtein_distance(word, input_word))
+    
     def getCandidates(self, prefix):
         input = prefix.lower()
         candidates = []
         suggestions = self.trie.keys(input)
         if len(suggestions) > 0:
             candidates = nlargest(10, suggestions, key=lambda word: self.wordsWithFrequencyDict.get(word, {}).get('frequency', 0))
-        elif self.pinyinDict.get(input):
-            candidates = self.pinyinDict.get(input)
         else:
-            alternatives = self.spellchecker.get_candidates(input)
-            alternatives.sort(key=lambda x: x[0], reverse=True)
-            candidates = [word for freq, word in alternatives]
+            candidates = self.getSuggestionOfSpellChecker(input)
+        
         candidates.insert(0, input)
+        
+        if self.pinyinDict.get(input):
+            candidates = candidates + self.pinyinDict.get(input)
         candidateList = list(OrderedDict.fromkeys(candidates).keys())[0:9]
         
         candidateList2 = []
