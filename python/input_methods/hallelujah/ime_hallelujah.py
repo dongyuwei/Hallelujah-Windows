@@ -20,6 +20,7 @@ class HallelujahTextService(TextService):
         self.loadTrie()
         self.loadWordsWithFrequency()
         self.loadPinyinData()
+        self.loadFuzzySoundexEncodedData()
         self.icon_dir = os.path.abspath(os.path.dirname(__file__))
         self.spellchecker = Speller()
     
@@ -82,13 +83,14 @@ class HallelujahTextService(TextService):
         candidates = [word for freq, word in alternatives]
         if len(input) > 3:
             encoded_key = fuzzySoundex.phonetics(input)
-            phonetic_candidates = self.sortByLevenshteinDistance(self.fuzzySoundexEncodedDict.get(encoded_key, []))
-            if len(phonetic_candidates) > 0:
+            phonetic_candidates = self.fuzzySoundexEncodedDict.get(encoded_key, [])
+            phonetic_candidates = self.sortByLevenshteinDistance(input, phonetic_candidates)
+            if phonetic_candidates and len(phonetic_candidates) > 0:
                 candidates = candidates[:4] + phonetic_candidates[:4]
         return candidates
     
-    def sortByLevenshteinDistance(input_word, phonetic_candidates):
-        return phonetic_candidates.sort(key=lambda word: levenshtein_distance(word, input_word))
+    def sortByLevenshteinDistance(self, input, phonetic_candidates):
+        return phonetic_candidates.sort(key=lambda word: levenshtein_distance(word, input))
     
     def getCandidates(self, prefix):
         input = prefix.lower()
