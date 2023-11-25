@@ -8,10 +8,20 @@ import marisa_trie
 import string
 from autocorrect import Speller
 from pyphonetics import FuzzySoundex
+import textdistance
+import os
+from loguru import logger
+
+user_folder = os.environ['userprofile']
+log_dir = r"{}\AppData\Local\PIME\Log".format(user_folder) 
+log_file = os.path.join(log_dir, "PIME-hallelujah.log")
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+logger.add(log_file)
 
 fuzzySoundex = FuzzySoundex()
-def levenshtein_distance(word, input_word):
-    return fuzzySoundex.distance(word, input_word, metric='levenshtein')
+def damerau_levenshtein_distance(word, input_word):
+    return textdistance.damerau_levenshtein(word, input_word)
 
 class HallelujahTextService(TextService):
     def __init__(self, client):
@@ -84,13 +94,11 @@ class HallelujahTextService(TextService):
         if len(input) > 3:
             encoded_key = fuzzySoundex.phonetics(input)
             phonetic_candidates = self.fuzzySoundexEncodedDict.get(encoded_key, [])
-            phonetic_candidates = self.sortByLevenshteinDistance(input, phonetic_candidates)
+            phonetic_candidates.sort(key=lambda word: damerau_levenshtein_distance(word, input))
             if phonetic_candidates and len(phonetic_candidates) > 0:
+                # logger.debug("phonetic_candidates {}", phonetic_candidates)
                 candidates = candidates[:4] + phonetic_candidates[:4]
         return candidates
-    
-    def sortByLevenshteinDistance(self, input, phonetic_candidates):
-        return phonetic_candidates.sort(key=lambda word: levenshtein_distance(word, input))
     
     def getCandidates(self, prefix):
         input = prefix.lower()
