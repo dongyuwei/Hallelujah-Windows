@@ -33,8 +33,35 @@ class TestHallelujahTextService(unittest.TestCase):
         self.assertEqual(candidates, ["hello ['hɛˈloʊ'] int. (打招呼)喂；你好", "hellos ['hellos*'] int. (打招呼)喂；你好", 'helloween   ', 'hellosoft   ', 'helloooo   '])
         
         # Test spelling suggestion
-        candidates = self.text_service.getCandidates('hellp')        
-        self.assertEqual(candidates, ['hellp   ', "help ['hɛlp'] v. 帮助；有助于；促进；擅自拿取；（不）能防止或避免某事物 n. 帮助", "hell ['hɛl'] n. 地狱；阴间；苦境；极大的痛苦 n. 究竟（用以加强语气） int. ", "hello ['hɛˈloʊ'] int. (打招呼)喂；你好", 'hellip   '])
+        candidates = self.text_service.getCandidates('aosome')        
+        self.assertEqual(candidates, [
+            'aosome   ',
+            "some ['səm'] adj. 一些；若干 adv. 大约；非常 pron. 一些(人、物)",
+            "assume ['əˈsum'] vt. 假定；设想；承担；(想当然的)认为；假装",
+            "awesome ['ˈɔsəm'] adj. 可怕的；表示敬畏的；了不起的；精彩的，绝妙的",
+            'osom   ',
+            "asme ['asme*'] abbr. 机场地面活动目标显示设备(=airport surface",
+            "acme ['ˈækmi'] n. 顶点；极点"])
+
+        candidates = self.text_service.getCandidates('kerrage')        
+        self.assertEqual(candidates, [
+            'kerrage   ',
+            'perpage   ',
+            "terrace ['ˈtɛrəs'] n. 平台；阳台；梯田 vt. 使成梯田；给 ... 建阳台",
+            "peerage ['ˈpɪrəʤ'] n. 贵族；贵族爵位或头衔；贵族名册",
+            "barrage ['bərɑʒ'] n. 弹幕；掩护炮火 n. 拦河坝 vt. 以密集火力进攻",
+            "courage ['kərɪʤ'] n. 勇气；胆量",
+            "carriage ['ˈkɛrəʤ'] n. 四轮马车；客车车厢；运输；运费；举止；托架",
+            "karaoke ['kɛriˈoʊki'] n. 卡拉OK",
+            "krug ['krəg'] n. 克鲁格"])
+
+        # test for pinyin input
+        candidates = self.text_service.getCandidates('pinyin')        
+        self.assertEqual(candidates, [
+            "pinyin ['pinyin*'] n. 拼音；汉语拼音",
+            '拼音   ',
+            'phonetic writing   ',
+            'pinyin (Chinese romanization)   '])
 
     def test_getOutput(self):
         output = self.text_service.getOutput('world')
