@@ -62,6 +62,18 @@ class TestHallelujahTextService(unittest.TestCase):
             '拼音   ',
             'phonetic writing   ',
             'pinyin (Chinese romanization)   '])
+        
+        candidates = self.text_service.getCandidates('suanfa')        
+        self.assertEqual(candidates, ['suanfa   ',
+            "santa ['ˈsænə'] [美]=Santa Claus. n. 圣诞老人",
+            "stanza ['ˈstænzə'] n. 诗节",
+            'sana   ',
+            "sauna ['ˈsɔnə'] n. 桑拿浴；蒸汽浴",
+            '算法   ',
+            "arithmetic ['ɛrɪθˈmɛtɪk'] n. 算术；计算 adj. 算术的",
+            "algorithm ['ˈælgərɪðəm'] n. 算法",
+            'method of calculation   '
+        ])
 
     def test_getOutput(self):
         output = self.text_service.getOutput('world')

@@ -110,9 +110,9 @@ class HallelujahTextService(TextService):
             candidates = self.getSuggestionOfSpellChecker(input)
         
         candidates.insert(0, input)
-        
-        if self.pinyinDict.get(input):
-            candidates = candidates + self.pinyinDict.get(input)
+        pinyin_candidates = self.pinyinDict.get(input)
+        if pinyin_candidates:
+            candidates = candidates[:5] + pinyin_candidates # make sure to show pinyin candidates
         candidateList = list(OrderedDict.fromkeys(candidates).keys())[0:9]
         
         candidateList2 = []
