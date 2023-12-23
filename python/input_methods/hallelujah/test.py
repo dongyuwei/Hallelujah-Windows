@@ -65,6 +65,17 @@ class TestHallelujahTextService(unittest.TestCase):
             "share ['ʃɛr'] vt. 分享，共享；分配；共有 vi. 分享 n. 一份；股份；分担；犁"
         ])
         
+        candidates = self.text_service.getCandidates('colla')
+        self.assertEqual(candidates, ['colla   ',
+            "collaboration ['kəlæbərˈeʃən'] n. 合作；通敌",
+            "collaborative ['kəˈlæbəretɪv'] adj. 协作的；合作的",
+            "collapse ['kəˈlæps'] v. （使）倒塌；（使）崩溃；（使）瓦解；折叠 n. 倒塌",
+            "collar ['ˈkɑlər'] n. 衣领；项圈；[机]轴环 vt. 抓住；为 ... 戴上项圈",
+            "collateral ['kəˈlætərəl'] adj. 旁系的；并行的；附属的 n. 附属担保",
+            "collaborate ['kəˈlæbəret'] vi. 合作；通敌",
+            "collapsed ['kəˈlæpst'] adj. 倒塌的",
+            "collage ['kəˈlɑʒ'] n. 拼贴；拼贴画；杂烩"
+        ])
         # Test spelling suggestion
         candidates = self.text_service.getCandidates('aosome')        
         self.assertEqual(candidates, ['aosome   ',
@@ -113,6 +124,18 @@ class TestHallelujahTextService(unittest.TestCase):
             "algorithm ['ˈælgərɪðəm'] n. 算法",
             "samba ['ˈsɑmbə'] n. 桑巴舞(一种源自非洲的巴西交谊舞) v. 跳桑巴舞",
             "snafu ['sˈnæfu'] n. 混乱 adj. 混乱的 vt. 弄乱"
+        ])
+
+        candidates = self.text_service.getCandidates('hezuo')        
+        self.assertEqual(candidates, ['hezuo   ',
+            "hero ['ˈhɪroʊ'] n. 英雄 n. 男主角；男主人公",
+            "hello ['hɛˈloʊ'] int. (打招呼)喂；你好",
+            "mezzo ['ˈmɛzoʊ'] n. 女中音 adj. 适中的；中间的",
+            '合作   ',
+            'to cooperate   ',
+            'to collaborate   ',
+            "haze ['hez'] n. 薄雾；迷糊 vi. 变模糊 vt. 戏弄",
+            "hess ['hɛs'] 赫斯(①姓氏 ②Victor Franz；  1883-1964； 生于奥"
         ])
 
     def test_getOutput(self):
