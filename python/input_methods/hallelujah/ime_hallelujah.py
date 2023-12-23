@@ -95,24 +95,19 @@ class HallelujahTextService(TextService):
             encoded_key = fuzzySoundex.phonetics(input)
             phonetic_candidates = self.fuzzySoundexEncodedDict.get(encoded_key, [])
             phonetic_candidates.sort(key=lambda word: damerau_levenshtein_distance(word, input))
-            if phonetic_candidates and len(phonetic_candidates) > 0:
-                # logger.debug("phonetic_candidates {}", phonetic_candidates)
-                candidates = candidates[:4] + phonetic_candidates[:4]
+            pinyin_candidates = self.pinyinDict.get(input, [])
+            # logger.debug("phonetic_candidates {}", phonetic_candidates)
+            candidates = candidates[:3] + pinyin_candidates[:3] + phonetic_candidates
         return candidates
     
     def getCandidates(self, prefix):
         input = prefix.lower()
         candidates = []
         suggestions = self.trie.keys(input)
-        if len(suggestions) > 0:
-            candidates = nlargest(10, suggestions, key=lambda word: self.wordsWithFrequencyDict.get(word, {}).get('frequency', 0))
-        else:
-            candidates = self.getSuggestionOfSpellChecker(input)
+        candidates = nlargest(10, suggestions, key=lambda word: self.wordsWithFrequencyDict.get(word, {}).get('frequency', 0))
+        candidates = candidates + self.getSuggestionOfSpellChecker(input)
         
         candidates.insert(0, input)
-        pinyin_candidates = self.pinyinDict.get(input)
-        if pinyin_candidates:
-            candidates = candidates[:5] + pinyin_candidates # make sure to show pinyin candidates
         candidateList = list(OrderedDict.fromkeys(candidates).keys())[0:9]
         
         candidateList2 = []
