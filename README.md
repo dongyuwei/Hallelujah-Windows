@@ -2,7 +2,7 @@
 
 # 哈利路亚英文输入法
 
-[![Build status](https://ci.appveyor.com/api/projects/status/cwfb9moce0dss7gs?svg=true)](https://ci.appveyor.com/project/dongyuwei/pime)
+[![Build status](https://ci.appveyor.com/api/projects/status/ch2ojcgq10gk3622?svg=true)](https://ci.appveyor.com/project/dongyuwei/hallelujah-windows)
 
 哈利路亚英文输入法 是一款智能英语输入法。其特性如下：
 
