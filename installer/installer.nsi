@@ -387,7 +387,7 @@ SectionEnd
 SectionGroup /e $(PYTHON_SECTION_GROUP) python_section_group
 	SectionGroup /e $(PYTHON_CHT_SECTION_GROUP) python_cht_section_group
 		Section $(HALLELUHAH) Hallelujah
-			SectionIn 2
+			SectionIn 1 2
 			SetOutPath "$INSTDIR\python\input_methods\hallelujah"
 			File /r "..\python\input_methods\hallelujah\*.*"
 			StrCpy $INST_PYTHON "True"
