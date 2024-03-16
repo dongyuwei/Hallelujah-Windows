@@ -10,14 +10,9 @@ from autocorrect import Speller
 from pyphonetics import FuzzySoundex
 import textdistance
 import os
+import threading
 from loguru import logger
 
-user_folder = os.environ['userprofile']
-log_dir = r"{}\AppData\Local\PIME\Log".format(user_folder) 
-log_file = os.path.join(log_dir, "PIME-hallelujah.log")
-if not os.path.exists(log_dir):
-    os.makedirs(log_dir)
-logger.add(log_file)
 
 fuzzySoundex = FuzzySoundex()
 def damerau_levenshtein_distance(word, input_word):
@@ -27,13 +22,58 @@ class HallelujahTextService(TextService):
     def __init__(self, client):
         TextService.__init__(self, client)
         self.dictPath = os.path.join(os.path.dirname(__file__), "dict")
-        self.loadTrie()
-        self.loadWordsWithFrequency()
-        self.loadPinyinData()
-        self.loadFuzzySoundexEncodedData()
         self.icon_dir = os.path.abspath(os.path.dirname(__file__))
+
+        # Data structures
+        self.trie = None
+        self.wordsWithFrequencyDict = {}
+        self.pinyinDict = {}
+        self.fuzzySoundexEncodedDict = {}
+
+        # For asynchronous loading
+        self.dataIsLoading = True
+        self.loadCounter = 0
+        self.loadCounterLock = threading.Lock()
+
+        # Logging setup
+        user_folder = os.environ['userprofile']
+        log_dir = os.path.join(user_folder, "AppData", "Local", "PIME", "Log")
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+        log_file = os.path.join(log_dir, "PIME-hallelujah.log")
+        logger.add(log_file)
+
+        # Load data asynchronously
+        self.loadDataAsync()
+
+        # Spell checker and phonetics
         self.spellchecker = Speller()
-    
+        self.fuzzySoundex = FuzzySoundex()
+
+    def loadDataAsync(self):
+        loading_functions = [
+            self.loadTrie,
+            self.loadWordsWithFrequency,
+            self.loadPinyinData,
+            self.loadFuzzySoundexEncodedData,
+        ]
+
+        for func in loading_functions:
+            thread = threading.Thread(target=self.asyncLoadWrapper, args=(func,), daemon=True)
+            thread.start()
+
+    def asyncLoadWrapper(self, loadFunction):
+        loadFunction()
+        with self.loadCounterLock:
+            self.loadCounter += 1
+            if self.loadCounter == len([
+                self.loadTrie,
+                self.loadWordsWithFrequency,
+                self.loadPinyinData,
+                self.loadFuzzySoundexEncodedData,
+            ]):
+                self.dataIsLoading = False
+
     def loadTrie(self):
         trie = marisa_trie.Trie()
         trie.load(os.path.join(self.dictPath, "google_227800_words.bin"))
@@ -103,11 +143,12 @@ class HallelujahTextService(TextService):
     def getCandidates(self, prefix):
         input = prefix.lower()
         candidates = []
-        suggestions = self.trie.keys(input)
-        candidates = nlargest(10, suggestions, key=lambda word: self.wordsWithFrequencyDict.get(word, {}).get('frequency', 0))
+        if self.trie:
+            suggestions = self.trie.keys(input)
+            candidates = nlargest(10, suggestions, key=lambda word: self.wordsWithFrequencyDict.get(word, {}).get('frequency', 0))
         candidates = candidates + self.getSuggestionOfSpellChecker(input)
         
-        candidates.insert(0, input)
+        # candidates.insert(0, input)
         candidateList = list(OrderedDict.fromkeys(candidates).keys())[0:9]
         
         candidateList2 = []
