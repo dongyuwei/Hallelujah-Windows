@@ -1,0 +1,1 @@
+./python/python3/virtualenv/Scripts/python.exe ./python/input_methods/hallelujah/test.py

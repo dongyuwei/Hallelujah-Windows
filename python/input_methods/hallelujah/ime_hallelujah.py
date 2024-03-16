@@ -23,15 +23,14 @@ fuzzySoundex = FuzzySoundex()
 def damerau_levenshtein_distance(word, input_word):
     return textdistance.damerau_levenshtein(word, input_word)
 
-class HallelujahTextService(TextService):
-    def __init__(self, client):
-        TextService.__init__(self, client)
+class PersistentImeService:
+    def __init__(self):
         self.dictPath = os.path.join(os.path.dirname(__file__), "dict")
+        self.icon_dir = os.path.abspath(os.path.dirname(__file__))
         self.loadTrie()
         self.loadWordsWithFrequency()
         self.loadPinyinData()
         self.loadFuzzySoundexEncodedData()
-        self.icon_dir = os.path.abspath(os.path.dirname(__file__))
         self.spellchecker = Speller()
     
     def loadTrie(self):
@@ -51,6 +50,14 @@ class HallelujahTextService(TextService):
     def loadFuzzySoundexEncodedData(self):
         with open(os.path.join(self.dictPath, "fuzzy_soundex_encoded_words.json"), encoding='utf-8') as f:
             self.fuzzySoundexEncodedDict = json.load(f)
+
+imeService = PersistentImeService()
+
+class HallelujahTextService(TextService):
+    def __init__(self, client):
+        TextService.__init__(self, client)
+        # Only load and build the dict/trie once! 因为每次切换输入法都会导致HallelujahTextService出现初始化。
+        self.__dict__.update(imeService.__dict__)
 
     def onActivate(self):
         TextService.onActivate(self)
