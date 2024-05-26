@@ -164,7 +164,7 @@ class HallelujahTextService(TextService):
         return word.strip()
         
     def onKeyDown(self, keyEvent):
-        print('halle keyEvent, charCode: ', keyEvent.charCode, '-- keyCode: ', keyEvent.keyCode)
+        # print('halle keyEvent, charCode: ', keyEvent.charCode, '-- keyCode: ', keyEvent.keyCode)
         charStr = chr(keyEvent.charCode)
             
         # handle candidate selection
@@ -179,7 +179,7 @@ class HallelujahTextService(TextService):
                 return True
             elif not keyEvent.isKeyDown(VK_SHIFT) and (keyEvent.keyCode >= ord('1') and keyEvent.keyCode <= ord('9')):
                 index = keyEvent.keyCode - ord('1')
-                print("halle", index, charStr, self.candidateList)
+                # print("halle", index, charStr, self.candidateList)
                 if index < len(self.candidateList):
                     candidate = self.candidateList[index]
                     word = self.getOutputFromCandidate(candidate)
@@ -211,6 +211,10 @@ class HallelujahTextService(TextService):
         elif charStr.isalpha():  # 英文字母 A-Z
             input = self.compositionString  + charStr
             self.inputWithCandidates(input)
+            return True
+        elif charStr.isdigit():
+            self.setCommitString(charStr)
+            self.clear()
             return True
         elif keyEvent.keyCode == VK_LEFT or keyEvent.keyCode == VK_UP:
             i = self.candidateCursor - 1
