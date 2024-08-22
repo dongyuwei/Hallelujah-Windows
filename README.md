@@ -1,7 +1,8 @@
 # 本项目基于 PIME 移植原苹果 Mac 系统上 [哈利路亚英文输入法](https://github.com/dongyuwei/hallelujahIM) 到 Windows 平台上。
 
 # 哈利路亚英文输入法
-
+![Platform:windows](https://img.shields.io/badge/platform-windows-blue)
+![github actions](https://github.com/dongyuwei/Hallelujah-Windows/actions/workflows/ci.yaml/badge.svg)
 [![Build status](https://ci.appveyor.com/api/projects/status/ch2ojcgq10gk3622?svg=true)](https://ci.appveyor.com/project/dongyuwei/hallelujah-windows)
 
 哈利路亚英文输入法 是一款智能英语输入法。其特性如下：
