@@ -18,14 +18,14 @@
 
 -   https://github.com/dongyuwei/PIME/releases
 
-## Build and compile with Visual Studio 2019
+## Build and compile with `Visual Studio 17 2022`
 
 1. 安装 cmake（tested with `cmake version 3.25.0-rc2`）
-2. 项目根目录下执行 ./build.bat
-3. 使用 NSIS 构建 install exe 文件：
+2. 项目根目录下执行 `./build.bat`, 这个是用来构建PIME Text Service，对应于 C++ 部分代码。
+3. 使用 NSIS 构建安装文件：
     1. Compile NSI scripts
-    2. File -> Load script... -> installer/installer.nsi
-4. CI 构建可参考 appveyor.yml
+    2. File -> Load script... -> installer/installer.nsi, 这个用于打包 Python 输入法代码，编译成 .exe 文件。
+4. CI 构建可参考 appveyor.yml 及 .github/workflows/ci.yaml
 
 ## 更好的 IPC 架構
 
