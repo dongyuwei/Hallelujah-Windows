@@ -16,9 +16,9 @@ jobs:
         uses: repolevedavaj/install-nsis@v1.0.2
         with:
           nsis-version: 3.08
-      - name: Run build.bat
+      - name: Build IME Text Service
         run: |
-          .\build.bat
+          .\build_github_ci.bat
       - name: Build the installer
         run: |
           cmd /C "C:\Program Files (x86)\NSIS\Bin\makensis.exe" ".\installer\installer.nsi"
