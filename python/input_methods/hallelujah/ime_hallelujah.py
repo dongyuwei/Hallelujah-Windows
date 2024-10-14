@@ -122,9 +122,13 @@ class HallelujahTextService(TextService):
             item = self.wordsWithFrequencyDict.get(word, {})
             ipa = item.get('ipa', '')
             ipa2 = f"{[ipa]}" if ipa else ' '
-            word_ipa_translation = f"{word} {ipa2} {self.getTranslationMessage(word)}"
+            # word_ipa_translation = f"{word} {ipa2} {self.getTranslationMessage(word)}"
+            # if word.lower().startswith(prefix.lower()):
+            #     word_ipa_translation = f"{prefix + word[len(prefix):]} {ipa2} {self.getTranslationMessage(word)}"
+            # candidateList2.append(word_ipa_translation[0:50])  
+            word_ipa_translation = word
             if word.lower().startswith(prefix.lower()):
-                word_ipa_translation = f"{prefix + word[len(prefix):]} {ipa2} {self.getTranslationMessage(word)}"
+                word_ipa_translation = f"{prefix + word[len(prefix):]}"
             candidateList2.append(word_ipa_translation[0:50])  
 
         return candidateList2
