@@ -31,6 +31,7 @@ class PersistentImeService:
         self.loadWordsWithFrequency()
         self.loadPinyinData()
         self.loadFuzzySoundexEncodedData()
+        self.get_user_defined_substitutions()
         self.spellchecker = Speller()
     
     def loadTrie(self):
@@ -45,6 +46,18 @@ class PersistentImeService:
     def loadPinyinData(self):
         with open(os.path.join(self.dictPath, "cedict.json"), encoding='utf-8') as f:
             self.pinyinDict = json.load(f)
+
+    def get_user_defined_substitutions(self):
+        json_file_path = os.path.join(os.environ['USERPROFILE'], 'hallelujah.json')
+        try:
+            with open(json_file_path, 'r') as file:
+                self.substitutions = json.load(file)
+        except FileNotFoundError:
+            print(f"File {json_file_path} not found.")
+            self.substitutions = {}
+        except json.JSONDecodeError as e:
+            print(f"Failed to parse JSON: {e}")
+            self.substitutions = {}
     
     # get phonetics match
     def loadFuzzySoundexEncodedData(self):
@@ -118,6 +131,8 @@ class HallelujahTextService(TextService):
         candidateList = list(OrderedDict.fromkeys(candidates).keys())[0:9]
         
         candidateList2 = []
+        if self.substitutions.get(input):
+            candidateList2.append(self.substitutions.get(input))
         for word in candidateList:
             item = self.wordsWithFrequencyDict.get(word, {})
             ipa = item.get('ipa', '')
