@@ -12,7 +12,8 @@
 3. 即时翻译功能(显示音标，及英文单词的中文释义)。
 4. 支持按拼音来输出对应英文。如输入`suanfa`，输入法会候选词中会显示 `algorithm`。
 5. 支持按英文单词的模糊音来输入。 如输入 `kerrage` 可以得到 `courage` 候选词，也可以输入 `aosome` 或者 `ausome` 来得 `awesome` 候选词。
-6. 选词方式：数字键 1~9 及 `Enter` 回车键和 `Space` 空格键均可选词提交。`Space` 空格键选词默认会自动附加一个空格在单词后面。`Enter` 回车键选词则不会附加空格。
+6. 具备 Text-Expander 功能。 本输入法会自动读取定义在用户目录下的`C:\Users\<user>\hallelujah.json` 文件，你可以定义自己常用的词组，比如 `{"yem":"you expand me"}`，那么当输入 `yem` 时会显示 `you expand me` 。
+7. 选词方式：数字键 1~9 及 `Enter` 回车键和 `Space` 空格键均可选词提交。`Space` 空格键选词默认会自动附加一个空格在单词后面。`Enter` 回车键选词则不会附加空格。
 
 # 下载安装
 
