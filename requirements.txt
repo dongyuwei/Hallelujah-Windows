@@ -2,7 +2,6 @@ orjson>=3.10,<4
 autocorrect==2.6.1
 colorama==0.4.6
 loguru==0.7.2
-marisa-trie==1.1.0
 pyphonetics==0.5.3
 textdistance==4.6.0
 Unidecode==1.3.7

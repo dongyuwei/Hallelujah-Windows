@@ -10,16 +10,6 @@ class TestHallelujahTextService(unittest.TestCase):
         client = {}
         self.text_service = HallelujahTextService(client)
 
-    def test_loadTrie(self):
-        # Test that trie is loaded 
-        self.assertIsNotNone(self.text_service.trie)
-    
-    def test_loadWordsWithFrequency(self):
-       # Test dictionary is loaded
-       self.assertIsNotNone(self.text_service.wordsWithFrequencyDict)
-       # Spot check some sample words
-       self.assertIn('hello', self.text_service.wordsWithFrequencyDict)
-
     def test_loadPinyinData(self):
         # Test pinyin dictionary is loaded
         self.assertIsNotNone(self.text_service.pinyinDict)
@@ -30,15 +20,16 @@ class TestHallelujahTextService(unittest.TestCase):
         candidates = self.text_service.getCandidates('hello')
         # Test candidates returned for valid word
         self.assertEqual(len(candidates), 9)
-        self.assertEqual(candidates, ["hello ['hɛˈloʊ'] int. (打招呼)喂；你好",
+        self.assertEqual(candidates, [
+            "hello ['hɛˈloʊ'] int. (打招呼)喂；你好",
             "hellos ['hellos*'] int. (打招呼)喂；你好",
-            'helloween   ',
-            'hellosoft   ',
-            'helloooo   ',
             "hell ['hɛl'] n. 地狱；阴间；苦境；极大的痛苦 n. 究竟（用以加强语气） int. ",
             "hill ['hɪl'] n. 小山；丘陵；山冈；斜坡 vt. 堆起；培土",
             "hall ['hɔl'] n. 大厅；礼堂",
-            "holly ['ˈhɑli'] n. 冬青树 Holly. n. 霍莉(女子名)"
+            "holly ['ˈhɑli'] n. 冬青树 Holly. n. 霍莉(女子名)",
+            "hull ['həl'] n. 外壳；皮；船身；船体；[植]花萼 v. 去壳",
+            "halo ['ˈheloʊ'] n. (日月等)晕；神像之光环",
+            "heel ['hil'] n. 脚后跟 v. 倾侧"
         ])
 
         candidates = self.text_service.getCandidates('test')

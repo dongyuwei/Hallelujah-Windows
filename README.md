@@ -43,7 +43,7 @@ C:\Users\<user>\AppData\Local\PIME\Log
 
 ## pip install packages
 - I use Python 3.11.1
--   python/python3/virtualenv/Scripts/python.exe -m pip install -U marisa-trie
+-   python/python3/virtualenv/Scripts/python.exe -m pip install -U pyphonetics
 -   python/python3/virtualenv/Scripts/python.exe -m pip freeze > requirements.txt
 -   python/python3/virtualenv/Scripts/python.exe -m pip install -r requirements.txt
 

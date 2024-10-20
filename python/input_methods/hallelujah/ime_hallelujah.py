@@ -1,10 +1,9 @@
 from keycodes import *
 from textService import *
 import os.path
+import sqlite3
 import orjson
 from collections import OrderedDict
-from heapq import nlargest
-import marisa_trie
 import string
 from autocorrect import Speller
 from pyphonetics import FuzzySoundex
@@ -38,21 +37,15 @@ class PersistentImeService:
             self.init()
 
     def init(self):
-        self.loadTrie()
-        self.loadWordsWithFrequency()
+        self.init_db_connection()
         self.loadPinyinData()
         self.loadFuzzySoundexEncodedData()
         self.get_user_defined_substitutions()
         self.spellchecker = Speller()
     
-    def loadTrie(self):
-        trie = marisa_trie.Trie()
-        trie.load(os.path.join(self.dictPath, "google_227800_words.bin"))
-        self.trie = trie
-    
-    def loadWordsWithFrequency(self):
-        with open(os.path.join(self.dictPath, "words_with_frequency_and_translation_and_ipa.json"), 'rb') as f:
-            self.wordsWithFrequencyDict = orjson.loads(f.read())
+    def init_db_connection(self):
+        with sqlite3.connect(os.path.join(self.dictPath, 'words_with_frequency_and_translation_and_ipa.sqlite3')) as conn:
+            self.db_connection = conn
     
     def loadPinyinData(self):
         with open(os.path.join(self.dictPath, "cedict.json"), 'rb') as f:
@@ -131,11 +124,32 @@ class HallelujahTextService(TextService):
             candidates = candidates[:3] + pinyin_candidates[:3] + phonetic_candidates
         return candidates
     
+    def query_candidates_by_prefix(self, prefix):
+        cursor = self.db_connection.cursor()
+        cursor.execute('SELECT word FROM words WHERE word LIKE ? ORDER BY frequency DESC limit 10', (prefix + '%',))
+        results = cursor.fetchall()
+        candidates = []
+        for result in results:
+            candidates.append(result[0])
+        return candidates 
+    
+    # spell check results also need translations_and_ipa
+    def get_translations_and_ipa(self, word_list):
+        cursor = self.db_connection.cursor()
+        placeholders = ', '.join(['?'] * len(word_list))
+        query = f"""
+        SELECT word, translation, ipa 
+        FROM words 
+        WHERE word IN ({placeholders})
+        """
+        cursor.execute(query, word_list)
+        results = cursor.fetchall()
+        translations_and_ipa = {word: (translation.replace('|', ' '), ipa) for word, translation, ipa in results}
+        return translations_and_ipa
+    
     def getCandidates(self, prefix):
         input = prefix.lower()
-        candidates = []
-        suggestions = self.trie.keys(input)
-        candidates = nlargest(10, suggestions, key=lambda word: self.wordsWithFrequencyDict.get(word, {}).get('frequency', 0))
+        candidates = self.query_candidates_by_prefix(input)
         candidates = candidates + self.getSuggestionOfSpellChecker(input)
         
         candidates.insert(0, input)
@@ -144,13 +158,13 @@ class HallelujahTextService(TextService):
         candidateList2 = []
         if self.substitutions.get(input):
             candidateList2.append(self.substitutions.get(input))
+        translations_and_ipa = self.get_translations_and_ipa(candidateList)
         for word in candidateList:
-            item = self.wordsWithFrequencyDict.get(word, {})
-            ipa = item.get('ipa', '')
+            translation, ipa = translations_and_ipa.get(word, ('', ''))
             ipa2 = f"{[ipa]}" if ipa else ' '
-            word_ipa_translation = f"{word} {ipa2} {self.getTranslationMessage(word)}"
+            word_ipa_translation = f"{word} {ipa2} {translation}"
             if word.lower().startswith(prefix.lower()):
-                word_ipa_translation = f"{prefix + word[len(prefix):]} {ipa2} {self.getTranslationMessage(word)}"
+                word_ipa_translation = f"{prefix + word[len(prefix):]} {ipa2} {translation}"
             candidateList2.append(word_ipa_translation[0:50])  
 
         return candidateList2
@@ -253,7 +267,3 @@ class HallelujahTextService(TextService):
                 self.setCandidateCursor(i)
             return True
         return False
-    
-    def getTranslationMessage(self, word):
-        translation = self.wordsWithFrequencyDict.get(word.lower(), {}).get('translation', [])
-        return " ".join(translation)
