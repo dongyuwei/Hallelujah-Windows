@@ -17,7 +17,7 @@
 
 # 下载安装
 
--   https://github.com/dongyuwei/PIME/releases
+-   https://github.com/dongyuwei/Hallelujah-Windows/releases
 
 ## Build and compile with Visual Studio 2019
 
