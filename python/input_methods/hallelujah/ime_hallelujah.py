@@ -1,7 +1,7 @@
 from keycodes import *
 from textService import *
 import os.path
-import json
+import orjson
 from collections import OrderedDict
 from heapq import nlargest
 import marisa_trie
@@ -40,18 +40,18 @@ class PersistentImeService:
         self.trie = trie
     
     def loadWordsWithFrequency(self):
-        with open(os.path.join(self.dictPath, "words_with_frequency_and_translation_and_ipa.json"), encoding='utf-8') as f:
-            self.wordsWithFrequencyDict = json.load(f)
+        with open(os.path.join(self.dictPath, "words_with_frequency_and_translation_and_ipa.json"), 'rb') as f:
+            self.wordsWithFrequencyDict = orjson.loads(f.read())
     
     def loadPinyinData(self):
-        with open(os.path.join(self.dictPath, "cedict.json"), encoding='utf-8') as f:
-            self.pinyinDict = json.load(f)
+        with open(os.path.join(self.dictPath, "cedict.json"), 'rb') as f:
+            self.pinyinDict = orjson.loads(f.read())
 
     def get_user_defined_substitutions(self):
         json_file_path = os.path.join(os.environ['USERPROFILE'], 'hallelujah.json')
         try:
-            with open(json_file_path, 'r') as file:
-                self.substitutions = json.load(file)
+            with open(json_file_path, 'rb') as f:
+                self.substitutions = orjson.loads(f.read())
         except FileNotFoundError:
             print(f"File {json_file_path} not found.")
             self.substitutions = {}
@@ -61,8 +61,8 @@ class PersistentImeService:
     
     # get phonetics match
     def loadFuzzySoundexEncodedData(self):
-        with open(os.path.join(self.dictPath, "fuzzy_soundex_encoded_words.json"), encoding='utf-8') as f:
-            self.fuzzySoundexEncodedDict = json.load(f)
+        with open(os.path.join(self.dictPath, "fuzzy_soundex_encoded_words.json"), 'rb') as f:
+            self.fuzzySoundexEncodedDict = orjson.loads(f.read())
 
 imeService = PersistentImeService()
 
