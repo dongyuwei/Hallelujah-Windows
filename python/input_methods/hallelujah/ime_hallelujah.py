@@ -9,6 +9,7 @@ from autocorrect import Speller
 from pyphonetics import FuzzySoundex
 import textdistance
 import os
+import shutil
 from loguru import logger
 import cProfile
 
@@ -18,6 +19,11 @@ log_file = os.path.join(log_dir, "PIME-hallelujah.log")
 if not os.path.exists(log_dir):
     os.makedirs(log_dir)
 logger.add(log_file)
+
+init_db_path = os.path.join(os.path.join(os.path.dirname(__file__), "dict"), 'words_with_frequency_and_translation_and_ipa.sqlite3')
+db_path = r"{}\AppData\Local\PIME\PIME-hallelujah.sqlite3".format(user_folder)
+# we must copy the sqlite db to user folder with read && write permission(wal,shm)
+shutil.copy2(init_db_path, db_path)
 
 fuzzySoundex = FuzzySoundex()
 def damerau_levenshtein_distance(word, input_word):
@@ -44,7 +50,7 @@ class PersistentImeService:
         self.spellchecker = Speller()
     
     def init_db_connection(self):
-        with sqlite3.connect(os.path.join(self.dictPath, 'words_with_frequency_and_translation_and_ipa.sqlite3')) as conn:
+        with sqlite3.connect(db_path) as conn:
             self.db_connection = conn
     
     def loadPinyinData(self):
