@@ -11,6 +11,7 @@ from pyphonetics import FuzzySoundex
 import textdistance
 import os
 from loguru import logger
+import cProfile
 
 user_folder = os.environ['userprofile']
 log_dir = r"{}\AppData\Local\PIME\Log".format(user_folder) 
@@ -27,6 +28,16 @@ class PersistentImeService:
     def __init__(self):
         self.dictPath = os.path.join(os.path.dirname(__file__), "dict")
         self.icon_dir = os.path.abspath(os.path.dirname(__file__))
+        if os.getenv('TEST_ENV') == 'true':
+            pr = cProfile.Profile()
+            pr.enable()
+            self.init()
+            pr.disable()
+            pr.print_stats(sort='time')
+        else:
+            self.init()
+
+    def init(self):
         self.loadTrie()
         self.loadWordsWithFrequency()
         self.loadPinyinData()
