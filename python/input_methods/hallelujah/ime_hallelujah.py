@@ -88,6 +88,7 @@ class HallelujahTextService(TextService):
         self.setSelKeys("123456789")
 
     def onDeactivate(self):
+        self.db_connection.close()
         TextService.onDeactivate(self)
 
     # 使用者按下按鍵，在 app 收到前先過濾那些鍵是輸入法需要的。
