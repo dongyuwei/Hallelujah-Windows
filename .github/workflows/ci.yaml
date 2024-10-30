@@ -12,6 +12,9 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: 'true'
+      - name: Unit tests
+        run: |
+         .\python\python3\virtualenv\Scripts\python.exe .\python\input_methods\hallelujah\test.py
       - name: Use Install NSIS
         uses: repolevedavaj/install-nsis@v1.0.2
         with:
