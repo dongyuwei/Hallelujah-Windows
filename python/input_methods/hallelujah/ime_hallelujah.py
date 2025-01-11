@@ -122,12 +122,18 @@ class HallelujahTextService(TextService):
         alternatives = self.spellchecker.get_candidates(input)
         alternatives.sort(key=lambda x: x[0], reverse=True)
         candidates = [word for freq, word in alternatives]
+        # If the input word is longer than 3 characters, add phonetic and Pinyin suggestions
         if len(input) > 3:
-            encoded_key = fuzzySoundex.phonetics(input)
-            phonetic_candidates = self.fuzzySoundexEncodedDict.get(encoded_key, [])
-            phonetic_candidates.sort(key=lambda word: damerau_levenshtein_distance(word, input))
+            phonetic_candidates = []
+            try:
+                encoded_key = fuzzySoundex.phonetics(input)
+                phonetic_candidates = self.fuzzySoundexEncodedDict.get(encoded_key, [])
+                phonetic_candidates.sort(key=lambda word: damerau_levenshtein_distance(word, input))
+            except Exception as e:
+                logger.error(f"Error generating phonetic key for '{input}': {e}")
+                phonetic_candidates = []  # Ensure phonetic_candidates is an empty list if an error occurs
+
             pinyin_candidates = self.pinyinDict.get(input, [])
-            # logger.debug("phonetic_candidates {}", phonetic_candidates)
             candidates = candidates[:3] + pinyin_candidates[:3] + phonetic_candidates
         return candidates
     
