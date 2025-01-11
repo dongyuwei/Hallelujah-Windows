@@ -39,7 +39,7 @@ https://github.com/EasyIME/forum/issues/11
 
 ## Log 日志(win 11 中可以搜索 `%AppData%` 快速定位到)
 
-C:\Users\<user>\AppData\Local\PIME\Log
+`C:\Users\<user>\AppData\Local\PIME\Log`
 
 ## pip install packages
 - I use Python 3.11.1
