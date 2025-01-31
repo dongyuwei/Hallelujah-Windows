@@ -4,6 +4,7 @@
 ![Platform:windows](https://img.shields.io/badge/platform-windows-blue)
 ![github actions](https://github.com/dongyuwei/Hallelujah-Windows/actions/workflows/ci.yaml/badge.svg)
 [![Build status](https://ci.appveyor.com/api/projects/status/ch2ojcgq10gk3622?svg=true)](https://ci.appveyor.com/project/dongyuwei/hallelujah-windows)
+[![GitHub downloads](https://img.shields.io/github/downloads/dongyuwei/Hallelujah-Windows/total?label=Downloads&labelColor=27303D&color=0D1117&logo=github&logoColor=FFFFFF&style=flat)](https://github.com/dongyuwei/Hallelujah-Windows/releases)
 
 哈利路亚英文输入法 是一款智能英语输入法。其特性如下：
 
