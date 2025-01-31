@@ -21,7 +21,8 @@
 -   https://github.com/dongyuwei/Hallelujah-Windows/releases
 
 # 注意事项
-- 要允许 `C:\Program Files (x86)\PIME\PIMELauncher.exe` 这个程序**开机自启动**，它是PIME守护进程。
+> [!WARNING]
+> 必须要允许 `C:\Program Files (x86)\PIME\PIMELauncher.exe` 这个程序**开机自启动**，它是PIME守护进程。
   
 ## Build and compile with Visual Studio 2019
 
