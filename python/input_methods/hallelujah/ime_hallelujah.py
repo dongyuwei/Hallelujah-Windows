@@ -79,8 +79,9 @@ imeService = PersistentImeService()
 class HallelujahTextService(TextService):
     def __init__(self, client):
         TextService.__init__(self, client)
-        # Only load and build the dict/trie once! 因为每次切换输入法都会导致HallelujahTextService出现初始化。
+        # Only load and build the dict/trie once! 因为每次切换输入法都会导致HallelujahTextService重新初始化。
         self.__dict__.update(imeService.__dict__)
+        self.showIPA = True
 
     def onActivate(self):
         TextService.onActivate(self)
@@ -91,9 +92,9 @@ class HallelujahTextService(TextService):
         self.db_connection.close()
         TextService.onDeactivate(self)
 
-    # 使用者按下按鍵，在 app 收到前先過濾那些鍵是輸入法需要的。
-    # return True，系統會呼叫 onKeyDown() 進一步處理這個按鍵
-    # return False，表示我們不需要這個鍵，系統會原封不動把按鍵傳給應用程式
+    # 使用者按下按键，在 app 收到前先处理输入法需要处理的。
+    # return True，系统会调用 onKeyDown() 进一步处理此按键。
+    # return False，表示输入法不需要处理，系统会把事件传递给应用程序处理。
     def filterKeyDown(self, keyEvent):
         # 使用者開始輸入，還沒送出前的編輯區內容稱 composition string
         # isComposing() 是 False，表示目前沒有正在編輯
@@ -105,9 +106,9 @@ class HallelujahTextService(TextService):
         if keyEvent.isKeyDown(VK_MENU):
             return False
 
-        # 如果按下 Ctrl 鍵
-        if keyEvent.isKeyDown(VK_CONTROL):
-            return False
+        # 如果按下的是 Ctrl 鍵本身
+        if keyEvent.keyCode == VK_CONTROL:
+            return True
 
         if keyEvent.isChar() and chr(keyEvent.charCode).isalpha():
             return True
@@ -170,14 +171,19 @@ class HallelujahTextService(TextService):
         
         candidateList2 = []
         if self.substitutions.get(input):
-            candidateList2.append(self.substitutions.get(input))
+            candidateList2.append(self.substitutions.get(input)) #自定义短语优先级最高
         translations_and_ipa = self.get_translations_and_ipa(candidateList)
         for word in candidateList:
             translation, ipa = translations_and_ipa.get(word, ('', ''))
             ipa2 = f"{[ipa]}" if ipa else ' '
             word_ipa_translation = f"{word} {ipa2} {translation}"
+            if not self.showIPA:
+                word_ipa_translation = word
             if word.lower().startswith(prefix.lower()):
-                word_ipa_translation = f"{prefix + word[len(prefix):]} {ipa2} {translation}"
+                if self.showIPA:
+                    word_ipa_translation = f"{prefix + word[len(prefix):]} {ipa2} {translation}"
+                else:
+                    word_ipa_translation = f"{prefix + word[len(prefix):]}"
             candidateList2.append(word_ipa_translation[0:50])  
 
         return candidateList2
@@ -217,15 +223,20 @@ class HallelujahTextService(TextService):
         return word.strip()
         
     def onKeyDown(self, keyEvent):
+        # Check for Ctrl+` key combination (VK_OEM_3 is the virtual key code for `)
+        if keyEvent.isKeyDown(VK_CONTROL) and keyEvent.keyCode == VK_OEM_3:
+            logger.info("Ctrl+` pressed")
+            self.showIPA = not self.showIPA
+            self.inputWithCandidates(self.compositionString)
+            return True  # Key handled, prevent further processing
+        if keyEvent.isKeyDown(VK_CONTROL) and keyEvent.keyCode != VK_OEM_3:
+            return False
+        
         # print('halle keyEvent, charCode: ', keyEvent.charCode, '-- keyCode: ', keyEvent.keyCode)
         charStr = chr(keyEvent.charCode)
-            
+
         # handle candidate selection
         if self.showCandidates:
-            if keyEvent.isKeyDown(VK_CONTROL):
-                self.setCommitString(self.compositionString)
-                self.clear()
-                return False
             if keyEvent.keyCode == VK_ESCAPE:
                 self.setCommitString(self.compositionString)
                 self.clear()

@@ -15,6 +15,7 @@
 5. 支持按英文单词的模糊音来输入。 如输入 `kerrage` 可以得到 `courage` 候选词，也可以输入 `aosome` 或者 `ausome` 来得 `awesome` 候选词。
 6. 具备 Text-Expander 功能。 本输入法会自动读取定义在用户目录下的`C:\Users\<user>\hallelujah.json` 文件，你可以定义自己常用的词组，比如 `{"yem":"you expand me"}`，那么当输入 `yem` 时会显示 `you expand me` 。
 7. 选词方式：数字键 1~9 及 `Enter` 回车键和 `Space` 空格键均可选词提交。`Space` 空格键选词默认会自动附加一个空格在单词后面。`Enter` 回车键选词则不会附加空格。
+8. User can toggle the IPA and translation with ctrl + ` key combination.
 
 # 下载安装
 
