@@ -34,6 +34,9 @@
     2. File -> Load script... -> installer/installer.nsi
 4. CI 构建可参考 appveyor.yml
 
+## DeepWiki
+https://deepwiki.com/dongyuwei/Hallelujah-Windows
+
 ## 更好的 IPC 架構
 
 https://github.com/EasyIME/forum/issues/11
