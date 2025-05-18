@@ -106,9 +106,9 @@ class HallelujahTextService(TextService):
         if keyEvent.isKeyDown(VK_MENU):
             return False
 
-        # 如果按下的是 Ctrl 鍵本身
-        if keyEvent.keyCode == VK_CONTROL:
-            return True
+        # 如果按下的不是 ctrl+` 则输入法不做处理
+        if keyEvent.isKeyDown(VK_CONTROL) and keyEvent.keyCode != VK_OEM_3:
+            return False
 
         if keyEvent.isChar() and chr(keyEvent.charCode).isalpha():
             return True
@@ -229,8 +229,6 @@ class HallelujahTextService(TextService):
             self.showIPA = not self.showIPA
             self.inputWithCandidates(self.compositionString)
             return True  # Key handled, prevent further processing
-        if keyEvent.isKeyDown(VK_CONTROL) and keyEvent.keyCode != VK_OEM_3:
-            return False
         
         # print('halle keyEvent, charCode: ', keyEvent.charCode, '-- keyCode: ', keyEvent.keyCode)
         charStr = chr(keyEvent.charCode)
