@@ -245,7 +245,7 @@ class HallelujahTextService(TextService):
                 if index < len(self.candidateList):
                     candidate = self.candidateList[index]
                     word = self.getOutputFromCandidate(candidate)
-                    self.setCommitString(word)
+                    self.setCommitString(word + ' ')
                     self.clear()
                     return True
         
