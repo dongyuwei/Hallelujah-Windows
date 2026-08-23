@@ -48,6 +48,8 @@ jobs:
           TIMESTAMP=$(date "+%Y%m%d%H%M%S")
           GITHASH=$(git rev-parse --short HEAD)
           TAG="v${VERSION}.${TIMESTAMP}.${GITHASH}"
+          ASSET="PIME-${TAG#v}-setup.exe"
+          mv "installer/PIME-$VERSION-setup.exe" "installer/$ASSET"
           git tag "$TAG"
           git push origin "$TAG"
-          gh release create "$TAG" "installer/PIME-$VERSION-setup.exe" --title "PIME $TAG" --generate-notes
+          gh release create "$TAG" "installer/$ASSET" --title "PIME $TAG" --generate-notes
