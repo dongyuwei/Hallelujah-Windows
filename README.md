@@ -25,14 +25,14 @@
 > [!WARNING]
 > 必须要允许 `C:\Program Files (x86)\PIME\PIMELauncher.exe` 这个程序**开机自启动**，它是PIME守护进程。
   
-## Build and compile with Visual Studio 2019
+## Build and compile with Visual Studio
 
-1. 安装 cmake（tested with `cmake version 3.25.0-rc2`）
+1. 安装 cmake（新版 CMake 4.x 需设置环境变量 `CMAKE_POLICY_VERSION_MINIMUM=3.5` 兼容本项目的旧版声明，GitHub Actions 中已自动处理）
 2. 项目根目录下执行 ./build.bat
 3. 使用 NSIS 构建 install exe 文件：
     1. Compile NSI scripts
     2. File -> Load script... -> installer/installer.nsi
-4. CI 构建可参考 appveyor.yml
+4. CI 构建可参考 `.github/workflows/`：`ci.yaml`（构建检查）、`release.yml`（push 到 master 时自动构建并发布 Release，文档类改动不触发）
 
 ## DeepWiki
 https://deepwiki.com/dongyuwei/Hallelujah-Windows
