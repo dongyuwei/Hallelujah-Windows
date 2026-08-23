@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+    branches: [master]
+    paths-ignore:
+      - '**.md'
+      - 'AUTHORS.txt'
+      - 'HACKING.txt'
+      - 'LICENSE.txt'
+      - 'APACHE-2.0.txt'
+      - 'LGPL-2.0.txt'
+      - 'PSF.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+
+      - name: Unit tests
+        run: |
+          .\python\python3\virtualenv\Scripts\python.exe .\python\input_methods\hallelujah\test.py
+
+      - name: Use Install NSIS
+        uses: repolevedavaj/install-nsis@v1.0.2
+        with:
+          nsis-version: 3.08
+
+      - name: Build IME Text Service
+        run: |
+          .\build_github_ci.bat
+
+      - name: Build the installer
+        run: |
+          cmd /C "C:\Program Files (x86)\NSIS\Bin\makensis.exe" ".\installer\installer.nsi"
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          VERSION=$(tr -d ' \r' < version.txt)
+          TIMESTAMP=$(date "+%Y%m%d%H%M%S")
+          GITHASH=$(git rev-parse --short HEAD)
+          TAG="v${VERSION}.${TIMESTAMP}.${GITHASH}"
+          git tag "$TAG"
+          git push origin "$TAG"
+          gh release create "$TAG" "installer/PIME-$VERSION-setup.exe" --title "PIME $TAG" --generate-notes
