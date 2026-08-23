@@ -5,3 +5,5 @@ installer/*.exe
 python/python3/virtualenv/Lib/site-packages/pip/_internal/
 python/python3/virtualenv/Lib/site-packages/**/*.pyc
 __pycache__/
+*.sqlite3-shm
+*.sqlite3-wal
