@@ -33,7 +33,7 @@ jobs:
 
       - name: Build IME Text Service
         run: |
-          .\build_github_ci.bat
+          .\build.bat
 
       - name: Build the installer
         run: |

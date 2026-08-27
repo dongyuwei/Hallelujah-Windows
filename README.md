@@ -27,7 +27,7 @@
   
 ## Build and compile with Visual Studio
 
-1. 安装 cmake（新版 CMake 4.x 需设置环境变量 `CMAKE_POLICY_VERSION_MINIMUM=3.5` 兼容本项目的旧版声明，GitHub Actions 中已自动处理）
+1. 安装 cmake（`build.bat` 已自动设置环境变量 `CMAKE_POLICY_VERSION_MINIMUM=3.5`，兼容新版 CMake 4.x 与本项目的旧版声明）
 2. 项目根目录下执行 ./build.bat
 3. 使用 NSIS 构建 install exe 文件：
     1. Compile NSI scripts
