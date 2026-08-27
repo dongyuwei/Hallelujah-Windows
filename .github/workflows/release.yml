@@ -52,4 +52,4 @@ jobs:
           mv "installer/PIME-$VERSION-setup.exe" "installer/$ASSET"
           git tag "$TAG"
           git push origin "$TAG"
-          gh release create "$TAG" "installer/$ASSET" --title "PIME $TAG" --generate-notes
+          gh release create "$TAG" "installer/$ASSET" --title "PIME $TAG" --generate-notes --prerelease
